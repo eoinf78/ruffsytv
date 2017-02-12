@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="video-player">
+                <h2>{{ ruffvideo.title }}</h2>
+                <youtube-player 
+                    [videoId]="id" 
+                    width="100%" height="330"
+                    (ready)="savePlayer($event)"
+                    (change)="onStateChange($event)">
+                </youtube-player>
+            </div>
+            <div class="video-details">
+                <div class="btn-group video-details__controls" role="group">
+                    <button type="button" class="btn btn-default" (click)="playVideo()">Play</button>
+                    <button type="button" class="btn btn-default" (click)="pauseVideo()">Pause</button>
+                </div>
+            </div>
+            <!--Temporary timeline-->
+            <div class="video-timeline row">
+                <div class="detail-label">Video Timeline</div>
+                <div class="video-timeline__container">
+                    <span class="video-timeline__slot" *ngFor="let slot of timeline_slots" [ngClass]="{'incident': slot.hasIncident}">
+                        <a (click)="gotoTime(slot.value)" [title]="slot.value | incidentTime"></a>
+                    </span>
+                </div>
+                <div class="video-timeline__legend">
+                    <div class="legend incident">Insight</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h4>Recorded Insights</h4>
+            <a (click)="setTime()" class="btnInsight">+ Add</a>
+            <div class="incident-list">
+                <div *ngFor="let incident of ruffvideo.incidents" class="incident-item">
+                    <div class="incident-item__container half">
+                        <span class="incident-item__label">Category</span>
+                        <select class="incident-item__catg" [(ngModel)]="incident.category">
+                            <option *ngFor="let item of catg | keys" [value]="item.key">{{item.value}}</option>
+                        </select>
+                    </div>
+                    <div class="incident-item__container half right">
+                        <span class="incident-item__label">Time</span>
+                        <span class="incident-item__time">{{ incident.time | incidentTime }}</span>
+                    </div>
+                    <div class="incident-item__container">
+                        <span class="incident-item__label">Description</span>
+                        <textarea [(ngModel)]="incident.description" class="incident-item__desc"></textarea>
+                    </div>
+                    <div class="incident-item__container">
+                        <button class="incident-item__deletebtn" type="button" (click)="deleteIncident(incident)" style="float: right">delete</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" (click)="getVideoInfo()">Get Video Info</button>
+            <button type="button" (click)="generateVideoTimeline()">Refresh Timeline</button>
+        </div>
+    </div>
+</div>

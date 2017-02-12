@@ -1,0 +1,214 @@
+
+/* .row */
+.row {
+    margin: .625rem -.625rem;
+
+    &:after,
+    &:before{
+        display: table;
+        content: '';
+    }
+
+    &:after {
+      clear: both;
+    }
+
+    [class*='col-'],
+    [class^='col-']{
+        position: relative;
+        float: left;
+        min-height: 50px;
+        padding-top: .625rem;
+        padding-bottom: .625rem;
+        width: 100%;
+
+        @include MQ(M) { 
+            padding-top: 0px; padding-bottom: 0px; 
+            padding-left: .625rem;
+            padding-right: .625rem;
+        }
+    }
+    
+    &__title{
+        color: $primary;
+        font-size: $small-space;
+        font-weight: 600;
+        border-style: solid;
+        border-color: $divider;
+        border-bottom-width: 1px;
+        margin: 0px;
+
+        [class*='col-'],
+        [class^='col-']{
+            padding: $small-space;
+            min-height: 20px;
+        }
+    }
+
+    &__item{
+        margin: 0px;
+        font-size: 14px;
+        &:nth-child(odd){
+            background: $bg-warm;
+        }
+
+        [class*='col-'],
+        [class^='col-']{
+            padding: $small-space;
+            min-height: 20px;
+        }
+    }
+
+    
+    // medium screens (larger then mobile)
+    .col-xs-1{
+        @include MQ(XS){ width: 8.333%; }
+    }
+    .col-xs-2{
+        @include MQ(XS){ width: 16.666%; }
+    }
+    .col-xs-3{
+        @include MQ(XS){ width: 25%; }
+    }
+    .col-xs-4{
+        @include MQ(XS){ width: 33.333%; }
+    }
+    .col-xs-5{
+        @include MQ(XS){ width: 41.666%; }
+    }
+    .col-xs-6{
+        @include MQ(XS){ width: 50%; }
+    }
+    .col-xs-7{
+        @include MQ(XS){ width: 58.333%; }
+    }
+    .col-xs-8{
+        @include MQ(XS){ width: 66.666%; }
+    }
+    .col-xs-9{
+        @include MQ(XS){ width: 75%; }
+    }
+    .col-xs-10{
+        @include MQ(XS){ width: 83.333%; }
+    }
+    .col-xs-11{
+        @include MQ(XS){ width: 91.666%; }
+    }
+    .col-xs-12{
+        @include MQ(XS){ width: 100%; }
+    }
+    
+    // medium screens (larger then mobile)
+    .col-sm-1{
+        @include MQ(S){ width: 8.333%; }
+    }
+    .col-sm-2{
+        @include MQ(S){ width: 16.666%; }
+    }
+    .col-sm-3{
+        @include MQ(S){ width: 25%; }
+    }
+    .col-sm-4{
+        @include MQ(S){ width: 33.333%; }
+    }
+    .col-sm-5{
+        @include MQ(S){ width: 41.666%; }
+    }
+    .col-sm-6{
+        @include MQ(S){ width: 50%; }
+    }
+    .col-sm-7{
+        @include MQ(S){ width: 58.333%; }
+    }
+    .col-sm-8{
+        @include MQ(S){ width: 66.666%; }
+    }
+    .col-sm-9{
+        @include MQ(S){ width: 75%; }
+    }
+    .col-sm-10{
+        @include MQ(S){ width: 83.333%; }
+    }
+    .col-sm-11{
+        @include MQ(S){ width: 91.666%; }
+    }
+    .col-sm-12{
+        @include MQ(S){ width: 100%; }
+    }
+    
+    // medium screens (larger then mobile)
+    .col-md-1{
+        @include MQ(M){ width: 8.333%; }
+    }
+    .col-md-2{
+        @include MQ(M){ width: 16.666%; }
+    }
+    .col-md-3{
+        @include MQ(M){ width: 25%; }
+    }
+    .col-md-4{
+        @include MQ(M){ width: 33.333%; }
+    }
+    .col-md-5{
+        @include MQ(M){ width: 41.666%; }
+    }
+    .col-md-6{
+        @include MQ(M){ width: 50%; }
+    }
+    .col-md-7{
+        @include MQ(M){ width: 58.333%; }
+    }
+    .col-md-8{
+        @include MQ(M){ width: 66.666%; }
+    }
+    .col-md-9{
+        @include MQ(M){ width: 75%; }
+    }
+    .col-md-10{
+        @include MQ(M){ width: 83.333%; }
+    }
+    .col-md-11{
+        @include MQ(M){ width: 91.666%; }
+    }
+    .col-md-12{
+        @include MQ(M){ width: 100%; }
+    }
+
+    //larger screens
+    .col-lg-1{
+        @include MQ(L){ width: 8.333%; }
+    }
+    .col-lg-2{
+        @include MQ(L){ width: 16.666%; }
+    }
+    .col-lg-3{
+        @include MQ(L){ width: 25%; }
+    }
+    .col-lg-4{
+        @include MQ(L){ width: 33.333%; }
+    }
+    .col-lg-5{
+        @include MQ(L){ width: 41.666%; }
+    }
+    .col-lg-6{
+        @include MQ(L){ width: 50%; }
+    }
+    .col-lg-7{
+        @include MQ(L){ width: 58.333%; }
+    }
+    .col-lg-8{
+        @include MQ(L){ width: 66.666%; }
+    }
+    .col-lg-9{
+        @include MQ(L){ width: 75%; }
+    }
+    .col-lg-10{
+        @include MQ(L){ width: 83.333%; }
+    }
+    .col-lg-11{
+        @include MQ(L){ width: 91.666%; }
+    }
+    .col-lg-12{
+        @include MQ(L){ width: 100%; }
+    }
+}

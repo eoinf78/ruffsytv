@@ -1,0 +1,149 @@
+$radius: 3px;
+$timeline_border: $divider;
+
+.btnInsight{
+    position: absolute;
+    cursor: pointer;
+    right: 12px;
+    top: 0px;
+    font-size: 14px;
+    padding: 2px 0px;
+    text-decoration: underline;
+    color: green;
+}
+
+.incident-list{
+    height: 500px;
+    overflow-y: auto; 
+    padding: 12px;
+    border: 1px solid $divider;
+
+    .incident-item{
+        width: 100%;
+        padding: 6px 12px;
+        background: $bg-warm;
+        width: 100%;
+        margin-bottom: 6px;
+        font-size: 12px;
+        border-radius: $radius;
+
+        &__container {
+            display: table;
+            width: 100%;
+            margin: 6px 0;
+            padding: 0 6px;
+
+            &.half{ width: 50%; float: left; }
+            &.right{ text-align: right; }
+        }
+
+        // &__icon{ }
+
+        &__time{
+            padding: 6px 0;
+            line-height: 20px;
+        }
+
+        &__catg {
+            width: 100%;
+            padding: 6px 0;
+            background: transparent;
+            border: 1px solid $divider;
+            outline: none;
+
+            &:focus {
+                border-color: $primary;
+            }
+
+            option{
+                padding: 6px 0;
+                line-height: 20px;
+            }
+        }
+
+        &__label{
+            font-size: 12px;
+            display: block;
+            width: 100%;
+            margin-bottom: 6px;
+            color: $primary;
+        }
+
+        &__deletebtn {
+            border: none;
+            background: transparent;
+            text-transform: uppercase;
+            color: $danger;
+            letter-spacing: 1px;
+            padding: 0px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        &__desc {
+            font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+            resize: none;
+            width: 100%;
+            border: 1px solid $divider;
+            border-radius: $radius;
+            outline: none;
+            background: transparent;
+            padding: 6px;
+
+            &:focus {
+                border-color: $primary;
+            }
+        }
+    }
+}
+
+.video-timeline {
+    margin-top: 24px;
+
+    &__container{
+        display: table;
+        width: 100%;
+        border-left: 1px solid $timeline_border;
+        border-top: 1px solid $timeline_border;
+        border-bottom: 1px solid $timeline_border;
+    }
+
+    &__slot {
+        position: relative;
+        height: 50px;
+        display: table-cell;
+
+        a {
+            position: absolute;
+            left: 0px; top: 0px;
+            width: 100%; height: 100%;
+            padding: 3px;
+            border-right: 1px solid $timeline_border;
+            &:hover{
+                background: $timeline_border;
+            }
+        }
+
+        &.incident{ background: #757575; }
+    }
+
+    &__legend{
+        margin-top: 24px;
+        display: table;
+        width: 100%;
+
+        .legend.incident{
+            padding-left: 24px;
+            position: relative;
+
+            &:before {
+                content: '';
+                position: absolute;
+                left: 0px; top: 3px;
+                width: 12px;
+                height: 12px;
+                background: #757575;
+            }
+        }
+    }
+}

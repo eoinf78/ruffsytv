@@ -1,0 +1,78 @@
+@import 'scss/variables.scss';
+@import 'scss/reset.scss';
+@import 'scss/layout.scss';
+@import 'scss/base.scss';
+
+@import 'video-player/components/video-player.component.scss';
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+h1{
+    font-size: 30px;
+    line-height: 36px;
+    margin-bottom: 24px;
+}
+
+h2 {
+    font-size: 21px;
+    line-height: 27px;
+    margin-bottom: 12px;
+}
+
+h4{
+    margin-bottom: 12px; 
+}
+
+nav{
+    width: 100%;
+    padding: 16px 0;
+    background: $nav-bg;
+    display: table;
+
+    .main-nav{
+        list-style: none;
+        width: 100%;
+
+        li{
+            float: right;
+            padding: 0 12px;
+
+            a{
+                text-decoration: none;
+                color: $white;
+                padding-bottom: 4px;
+                border-bottom: 1px solid transparent;
+
+                &:hover{
+                    border-color: $white;
+                }
+            }
+        }
+    }
+}
+
+section{
+    width: 960px;
+    margin: 0px auto;
+    display: table;
+}
+
+.detail-label{
+    display: block;
+    width: 100%;
+    margin-bottom: $small-space;
+    padding-bottom: 12px;
+    border-bottom: 1px solid $divider;
+    font-size: 18px;
+    line-height: 22px;
+    color: $primary;
+    font-weight: 600;
+}
