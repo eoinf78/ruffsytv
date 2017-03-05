@@ -2,3 +2,5 @@
 build
 node_modules
 typings
+debug.log
+npm-debug.log
