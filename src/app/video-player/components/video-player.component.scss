@@ -71,6 +71,7 @@ $timeline_border: $divider;
 
         &__deletebtn {
             border: none;
+            font-size: 20px;
             background: transparent;
             text-transform: uppercase;
             color: $danger;
@@ -97,34 +98,117 @@ $timeline_border: $divider;
     }
 }
 
+.video-player__status {
+    font-size: 14px;
+    line-height: 32px;
+    float: right;
+    padding-left: 14px;
+    position: relative;
+
+    &:before {
+        content: '';
+        width: 8px; height: 8px;
+        border-radius: 4px;
+        background: $danger;
+        position: absolute;
+        top: 12px; left: 0px;
+
+    }
+}
+
+.video-details {
+    &__controls{
+        display: table;
+        width: 100%;
+        background: $bg-darkgrey;
+    }
+
+    &__timerec{
+        color: $white;
+        padding: 6px;
+        float: right;
+        text-align: right;
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .btnVideoControl {
+        outline: none;
+        background: black;
+        color: white;
+        border-left: solid $white;
+        border-width: 0 1px 0 0;
+        width: 50px;
+        text-align: center; 
+        padding: 0 6px;
+        cursor: pointer;
+        font-size: 22px;
+        height: 32px;
+    }
+}
+
 .video-timeline {
-    margin-top: 24px;
+    margin-top: 0px;
+    position: relative;
+
+    .small{
+        height: 14px;
+        padding: 2px;
+        width: 100%;
+        background: $bg-darkgrey;
+    }
 
     &__container{
         display: table;
         width: 100%;
-        border-left: 1px solid $timeline_border;
-        border-top: 1px solid $timeline_border;
-        border-bottom: 1px solid $timeline_border;
+        position: relative;
+        padding-bottom: 22px
+        // border-left: 1px solid $timeline_border;
+        // border-top: 1px solid $timeline_border;
+        // border-bottom: 1px solid $timeline_border;
     }
 
-    &__slot {
-        position: relative;
-        height: 50px;
-        display: table-cell;
+    &__slot{
+        position: absolute;
+        width: 10px; height: 20px;
+        background: $success;
+        // border: 1px solid green;
+        bottom: 0px;
+        z-index: 10;
+        transition: all 0.25s;
 
-        a {
-            position: absolute;
-            left: 0px; top: 0px;
-            width: 100%; height: 100%;
-            padding: 3px;
-            border-right: 1px solid $timeline_border;
-            &:hover{
-                background: $timeline_border;
-            }
+        &.bug { background: $danger; }
+
+        &:hover {
+            z-index: 500;
+            transform: scale(1.25);
+            box-shadow: 1px 1px 1px #000000;
         }
 
-        &.incident{ background: #757575; }
+        a {
+             position: absolute;
+             left: 0px; top: 0px;
+             width: 100%; height: 100%;
+             cursor: pointer;
+
+             
+        //     padding: 3px;
+        //     border-right: 1px solid $timeline_border;
+        //     &:hover{
+        //         background: $timeline_border;
+        //     }
+        }
+
+        // &.incident{ background: #757575; }
+    }
+
+    &__pin{
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 0px;
     }
 
     &__legend{
@@ -145,5 +229,118 @@ $timeline_border: $divider;
                 background: #757575;
             }
         }
+    }
+}
+
+input[type="range"].video-timeline__timeline {
+    width: 100%;
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    background: transparent; /* Otherwise white in Chrome */
+    margin-top: 12px;
+    margin-left: 0px;
+    margin-right: 0px;
+
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+    }
+
+    &:focus {
+        outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+    }
+
+    &::-ms-track {
+        width: 100%;
+        cursor: pointer;
+
+        /* Hides the slider so custom styles can be added */
+        background: transparent; 
+        border-color: transparent;
+        color: transparent;
+        //padding-left: 2px;
+    }
+
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        //border: 1px solid #000000;
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        background: #ffffff;
+        cursor: pointer;
+        margin-top: 2px;
+        //margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+        //box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+    }
+
+    /* All the same stuff for Firefox */
+    &::-moz-range-thumb {
+        //box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        border: 1px solid #000000;
+        height: 16px;
+        width: 16px;
+        border-radius: 3px;
+        background: #ffffff;
+        cursor: pointer;
+    }
+
+    /* All the same stuff for IE */
+    &::-ms-thumb {
+        //box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        //border: 1px solid #000000;
+        height: 10x;
+        width: 10px;
+        border-radius: 3px;
+        background: #ffffff;
+        cursor: pointer;
+    }
+
+    &::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 14px;
+        cursor: pointer;
+        //box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        background: $bg-darkgrey;
+        border-radius: 7px;
+        //border: 0.2px solid #010101;
+    }
+
+    &:focus::-webkit-slider-runnable-track {
+        background: $bg-darkgrey;
+    }
+    &::-moz-range-track {
+        width: 100%;
+        height: 14px;
+        cursor: pointer;
+        //box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        background: $bg-darkgrey;
+        border-radius: 1.3px;
+        //border: 0.2px solid #010101;
+    }
+    &::-ms-track {
+        width: 100%;
+        height: 8.4px;
+        cursor: pointer;
+        background: transparent;
+        border-color: transparent;
+        border-width: 16px 0;
+        color: transparent;
+    }
+    &::-ms-fill-lower {
+        background: $bg-darkgrey;
+        //border: 0.2px solid #010101;
+        border-radius: 2.6px;
+        //box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    }
+    &:focus::-ms-fill-lower {
+        background: $bg-darkgrey;
+    }
+    &::-ms-fill-upper {
+        background: $bg-darkgrey;
+        //border: 0.2px solid #010101;
+        border-radius: 2.6px;
+        //box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    }
+    &:focus::-ms-fill-upper {
+        background: $bg-darkgrey;
     }
 }

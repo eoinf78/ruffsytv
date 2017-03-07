@@ -3,6 +3,7 @@
 @import 'scss/layout.scss';
 @import 'scss/base.scss';
 
+@import 'login/components/login.component.scss';
 @import 'video-player/components/video-player.component.scss';
 
 * {
@@ -55,6 +56,16 @@ nav{
                     border-color: $white;
                 }
             }
+
+            &.main-logo {
+                float: left;
+
+                .fa { margin-right: 6px }
+
+                a:hover {
+                    border: none;
+                }
+            }
         }
     }
 }
@@ -75,4 +86,54 @@ section{
     line-height: 22px;
     color: $primary;
     font-weight: 600;
+}
+
+.btn {
+    outline: none;
+    padding: 12px;
+    line-height: 18px;
+    margin: 0px 3px;
+    border: solid 1px;
+    cursor: pointer;
+
+    &.fullwidth{
+        width: 100%;
+        margin: 0px;
+    }
+
+    &__solid {
+        border-color: $primary;
+        color: $white;
+        background: $primary;
+    }
+}
+
+
+// Input fields
+.input-container {
+    display: table;
+    width: 100%;
+    margin-bottom: 24px;
+
+    .input-label{
+        display: block;
+        width: 100%;
+        margin-bottom: 6px;
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+        outline: none;
+        padding: 12px;
+        border: 1px solid $divider;
+        font-size: 14px;
+        line-height: 18px;
+        width: 100%;
+
+        &:focus {
+            border-color: $primary;
+        }
+    }
 }

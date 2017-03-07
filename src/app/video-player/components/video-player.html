@@ -2,9 +2,10 @@
     <div class="row">
         <div class="col-md-8">
             <div class="video-player">
-                <h2>{{ ruffvideo.title }}</h2>
+                <h2>{{ ruffvideo.title }}<span class="video-player__status" *ngIf="totalTime <= 0">Live</span></h2>
                 <youtube-player 
                     [videoId]="id" 
+                    playerVars="{ 'controls': 0 }"
                     width="100%" height="330"
                     (ready)="savePlayer($event)"
                     (change)="onStateChange($event)">
@@ -12,20 +13,38 @@
             </div>
             <div class="video-details">
                 <div class="btn-group video-details__controls" role="group">
-                    <button type="button" class="btn btn-default" (click)="playVideo()">Play</button>
-                    <button type="button" class="btn btn-default" (click)="pauseVideo()">Pause</button>
+                    <button type="button" class="btnVideoControl" (click)="playVideo()" *ngIf="playerstate != 1 && totalTime > 0">
+                        <i class="fa fa-play" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnVideoControl" (click)="pauseVideo()" *ngIf="playerstate == 1 && totalTime > 0" >
+                        <i class="fa fa-pause" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnVideoControl" (click)="toggleMute('mute')" *ngIf="!isVideoMuted" >
+                        <i class="fa fa-volume-up" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnVideoControl" (click)="toggleMute('unmute')" *ngIf="isVideoMuted" >
+                        <i class="fa fa-volume-off" aria-hidden="true"></i>
+                    </button>
+                    <input type="range" class="video-details__volume" min="0" max="100" [(ngModel)]="video_volume" (ngModelChange)="changeVolume($event)"/>
+                    <span class="video-details__timerec">{{ current | incidentTime }}<span>&nbsp;/ {{ totalTime | incidentTime }}</span></span>
                 </div>
             </div>
             <!--Temporary timeline-->
-            <div class="video-timeline row">
-                <div class="detail-label">Video Timeline</div>
-                <div class="video-timeline__container">
+            <div class="video-timeline" *ngIf="totalTime > 0">
+                <!--<div class="detail-label">Video Timeline</div>
+                <div class="video-timeline__container" style="display: none;">
                     <span class="video-timeline__slot" *ngFor="let slot of timeline_slots" [ngClass]="{'incident': slot.hasIncident}">
                         <a (click)="gotoTime(slot.value)" [title]="slot.value | incidentTime"></a>
                     </span>
                 </div>
-                <div class="video-timeline__legend">
-                    <div class="legend incident">Insight</div>
+                <div class="video-timeline__container small" style="display: none;">
+                    <span class="video-timeline__pin" [ngStyle]="{left: current+'px'}"></span>
+                </div>-->
+                <div class="video-timeline__container">
+                    <input class="video-timeline__timeline" type="range" min="0" [max]="totalTime" [(ngModel)]="current" (ngModelChange)="moveSlider($event)"/>
+                    <span class="video-timeline__slot" *ngFor="let slot of ruffvideo.incidents" [ngStyle]="{left: setInsightPositions(slot.time)+'%'}" [ngClass]="{ bug: getCatgClass(slot.category) }">
+                        <a (click)="gotoTime(slot.time)" [title]="slot.time | incidentTime"></a>
+                    </span>
                 </div>
             </div>
         </div>
@@ -49,7 +68,9 @@
                         <textarea [(ngModel)]="incident.description" class="incident-item__desc"></textarea>
                     </div>
                     <div class="incident-item__container">
-                        <button class="incident-item__deletebtn" type="button" (click)="deleteIncident(incident)" style="float: right">delete</button>
+                        <button class="incident-item__deletebtn" type="button" title="Delete insight" (click)="deleteIncident(incident)" style="float: right">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
             </div>

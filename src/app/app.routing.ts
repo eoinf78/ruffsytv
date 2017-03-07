@@ -1,14 +1,16 @@
 import {Routes, RouterModule} from "@angular/router";
 
 import { VideoPlayerComponent } from "./video-player/components/video-player.component";
+
+import { LoginComponent } from './login/components/login.component';
 import {TaskListComponent} from "./todo/components/task-list.component";
 import {AboutComponent} from "./about/components/about.component";
 import {ModuleWithProviders} from "@angular/core";
 
 const appRoutes: Routes = [
-    {path: '', redirectTo: 'vidplayer', pathMatch: 'full'},
+    {path: '', redirectTo: 'login', pathMatch: 'full'},
     {path: 'vidplayer', component: VideoPlayerComponent, data: {title: 'Video Player'}},
-    {path: 'tasks', component: TaskListComponent, data: {title: 'TaskList'}},
+    {path: 'login', component: LoginComponent, data: {title: 'Login'}},
     {path: 'about', component: AboutComponent, data: {title: 'About'}}
 ];
 
