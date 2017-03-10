@@ -1,3 +1,4 @@
+import { VideoService } from './../services/video-service';
 import { Component, Inject, Input, Output, EventEmitter } from "@angular/core";
 import { RuffVideo, Incident, IncidentCatg } from '../../models/ruffvideo';
 
@@ -14,20 +15,27 @@ export class VideoPlayerComponent {
     private timeArray: number[] = [];
 
     teststring: string = "String";
-    ruffvideo: RuffVideo = new RuffVideo();
+    ruffVideo: RuffVideo;
     catg = IncidentCatg;
 
     //Timeline
-    timeline_slots: any[] = []   ;
+    timeline_slots: any[] = [];
 
-    @Output() statusChanged:any = new EventEmitter<any>();
+    @Output() statusChanged: any = new EventEmitter<any>();
 
-    constructor() {
+    constructor(private videoService: VideoService) {
+        this.ruffVideo = this.newVideo();
+    }
+
+    newVideo(): RuffVideo {
+        let video = new RuffVideo();
         //this.ruffvideo.title = "New Video";
-        this.ruffvideo.description = "";
-        this.ruffvideo.projectname = "New Project";
-        this.ruffvideo.incidents = [];
-        this.ruffvideo.tags = [];
+        this.ruffVideo.description = "";
+        this.ruffVideo.projectname = "New Project";
+        this.ruffVideo.incidents = [];
+        this.ruffVideo.tags = [];
+        this.videoService.addVideo(video);
+        return video;
     }
     onStateChange(event) {
         this.ytEvent = event.target.getCurrentTime();
@@ -38,9 +46,9 @@ export class VideoPlayerComponent {
         console.log(player.getDuration());
         this.player = player;
         player.hideVideoInfo();
-        player.setOption("captions", "track", {"languageCode": "es"});
+        player.setOption("captions", "track", { "languageCode": "es" });
         // player.setOption('showinfo', 0);
-        this.ruffvideo.title = this.player.getVideoData().title;
+        this.ruffVideo.title = this.player.getVideoData().title;
         //Temporary, only on video viewer after
         this.generateVideoTimeline();
     }
@@ -54,23 +62,26 @@ export class VideoPlayerComponent {
     setTime() {
         let time = Math.floor(this.player.getCurrentTime());
         let newIncident: Incident = new Incident();
-        let sortedArray = this.ruffvideo.incidents;
+        let sortedArray = this.ruffVideo.incidents;
         newIncident.time = time;
         newIncident.description = "new incident";
         newIncident.category = IncidentCatg.General;
 
-        this.ruffvideo.incidents.push(newIncident);
+        this.ruffVideo.incidents.push(newIncident);
         this.refreshVideoTimeline();
+
+        this.videoService.updateVideo(this.ruffVideo);
 
         //this.timeArray.push(Math.floor(this.player.getCurrentTime()));
     }
     deleteIncident(item) {
-        let idx = this.ruffvideo.incidents.indexOf(item);
-        this.ruffvideo.incidents.splice(idx, 1);
+        let idx = this.ruffVideo.incidents.indexOf(item);
+        this.ruffVideo.incidents.splice(idx, 1);
 
+        this.videoService.updateVideo(this.ruffVideo);
     }
     getVideoInfo() {
-        console.log(this.ruffvideo);
+        console.log(this.ruffVideo);
     }
     gotoTime(goto) {
         this.player.seekTo(goto);
@@ -82,7 +93,7 @@ export class VideoPlayerComponent {
 
         this.timeline_slots.forEach(slot => {
             var end = slot.value + timeBlock;
-            this.ruffvideo.incidents.forEach(incident => {
+            this.ruffVideo.incidents.forEach(incident => {
                 if (incident.time >= slot.value && incident.time <= end) {
                     slot.hasIncident = true;
                 }
@@ -99,7 +110,7 @@ export class VideoPlayerComponent {
             var start = timeBlock * i;
             var end = start + timeBlock;
             let hasIncident = false;
-            this.ruffvideo.incidents.forEach(element => {
+            this.ruffVideo.incidents.forEach(element => {
                 if (element.time >= start && element.time <= end) {
                     hasIncident = true;
                 }

@@ -1,3 +1,4 @@
+import { VideoService } from './video-player/services/video-service';
 import {NgModule}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
@@ -7,9 +8,7 @@ import { KeysPipe, IncidentTimePipe, IncidentCatgPipe, OrderByPipe } from './pip
 import {AppComponent} from "./app.component";
 import { VideoPlayerComponent } from "./video-player/components/video-player.component";
 
-import {TaskListComponent} from "./todo/components/task-list.component";
 import {AboutComponent} from "./about/components/about.component";
-import {TaskComponent} from "./todo/components/task.component";
 
 import {routing, appRoutingProviders} from './app.routing';
 import {FormsModule} from "@angular/forms";
@@ -24,8 +23,6 @@ import {FormsModule} from "@angular/forms";
     declarations: [
         AppComponent,
         VideoPlayerComponent,
-        TaskComponent,
-        TaskListComponent,
         AboutComponent,
         KeysPipe,
         IncidentTimePipe,
@@ -33,7 +30,8 @@ import {FormsModule} from "@angular/forms";
         OrderByPipe,
     ],
     providers: [
-        appRoutingProviders
+        appRoutingProviders,
+        VideoService
     ],
     bootstrap: [AppComponent]
 })

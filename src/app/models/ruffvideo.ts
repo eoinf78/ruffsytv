@@ -1,4 +1,5 @@
 export class RuffVideo {
+    public id: String;
     public title: string;
     public description: string;
     public projectname: string;
@@ -7,14 +8,6 @@ export class RuffVideo {
     public incidents: Incident[];
 
     constructor(  ) {}
-
-    // constructor(vidDetails){
-    //     this.title = vidDetails.title;
-    //     this.description = vidDetails.description;
-    //     this.projectname = vidDetails.projectname;
-    //     this.tags = vidDetails.tags;
-    //     this.incidents = vidDetails.incidents;
-    // }
 }
 
 export class Incident {
