@@ -1,5 +1,5 @@
 import { VideoService } from './../services/video-service';
-import { Component, Inject, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Inject, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { RuffVideo, Incident, IncidentCatg } from '../../models/ruffvideo';
 
 import _ from "lodash";
@@ -8,15 +8,22 @@ import _ from "lodash";
     selector: 'vidplayer',
     templateUrl: './app/video-player/components/video-player.html'
 })
-export class VideoPlayerComponent {
-    id = 'KDov1ppPLCE'; //'rrkrvAUbU9Y';
+export class VideoPlayerComponent implements OnInit {
+    id = 'L7ivJTup2mc'; // GJ4KPrrbOU4'; // live video
+    // id = 'KDov1ppPLCE';
     private player;
     private ytEvent;
     private timeArray: number[] = [];
 
+    playerstate: number;
+    isVideoMuted: boolean = false;
+    video_volume: number = 10;
     teststring: string = "String";
     ruffVideo: RuffVideo;
     catg = IncidentCatg;
+
+    current: number = 0;
+    totalTime: number = 0;
 
     //Timeline
     timeline_slots: any[] = [];
@@ -29,35 +36,70 @@ export class VideoPlayerComponent {
 
     newVideo(): RuffVideo {
         let video = new RuffVideo();
-        //this.ruffvideo.title = "New Video";
+        //this.ruffVideo.title = "New Video";
         this.ruffVideo.description = "";
         this.ruffVideo.projectname = "New Project";
         this.ruffVideo.incidents = [];
         this.ruffVideo.tags = [];
         this.videoService.addVideo(video);
+        this.setTimeInterval();
         return video;
     }
+
+    ngOnInit() {
+        console.log('setTimeInterval');
+        //this.setTimeInterval();
+    }
+
+    moveSlider(event) {
+        console.log(event);
+        this.gotoTime(event);
+    }
+    changeVolume(event) {
+        this.player.setVolume(event);
+        this.video_volume = event;
+    }
+    onPlayerError(event) {
+        console.log("*** error ***");
+        console.log(event);
+    }
+
     onStateChange(event) {
+        this.playerstate = this.player.getPlayerState();
         this.ytEvent = event.target.getCurrentTime();
+        console.log('this.playerstate: ' + this.playerstate);
     }
     savePlayer(player) {
-        console.log('getVideoData');
-        console.log(player);
-        console.log(player.getDuration());
         this.player = player;
         player.hideVideoInfo();
         player.setOption("captions", "track", { "languageCode": "es" });
         // player.setOption('showinfo', 0);
+        this.player.playVideo();
+        this.player.hideVideoInfo();
+        this.playerstate = this.player.getPlayerState();
+        this.isVideoMuted = this.player.isMuted();
+        this.video_volume = this.player.getVolume();
+        this.totalTime = this.player.getDuration();
         this.ruffVideo.title = this.player.getVideoData().title;
-        //Temporary, only on video viewer after
-        this.generateVideoTimeline();
+       
+        this.setTimeInterval();
     }
     playVideo() {
-        console.log(this.player);
         this.player.playVideo();
     }
     pauseVideo() {
         this.player.pauseVideo();
+    }
+    toggleMute(val) {
+        if (val === 'mute') {
+            this.player.mute();
+            this.isVideoMuted = true;
+            this.video_volume = 0;
+        } else {
+            this.player.unMute();
+            this.isVideoMuted = false;
+            this.video_volume = this.player.getVolume();
+        }
     }
     setTime() {
         let time = Math.floor(this.player.getCurrentTime());
@@ -100,6 +142,11 @@ export class VideoPlayerComponent {
             });
         });
     }
+    setInsightPositions(val) {
+        let total = this.totalTime;
+        let percentage = (val / total) * 100;
+        return Math.floor(percentage);
+    }
     generateVideoTimeline() {
         let dur = this.player.getDuration();
         let numOfSlots = 40;
@@ -118,5 +165,18 @@ export class VideoPlayerComponent {
 
             this.timeline_slots.push({ 'value': start, 'hasIncident': hasIncident });
         }
+    }
+
+    getCatgClass(catg) {
+        return parseInt(catg, 10) === IncidentCatg.Bug;
+    }
+
+    setTimeInterval() {
+        let vm = this;
+        setInterval(function () {
+            if (!vm.player) { return ; }
+
+            vm.current = Math.round(vm.player.getCurrentTime());
+        }, 100);
     }
 }

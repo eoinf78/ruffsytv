@@ -6,8 +6,18 @@ import { IncidentCatg } from '../models/ruffvideo';
 export class IncidentTimePipe implements PipeTransform {
     transform(sec: number) {
         let mins = Math.floor(sec / 60);
+        let hours = Math.floor(mins / 60);
+        let minutes = 0;
+        if (hours > 0) {
+            minutes = mins - (hours * 60);
+        } else {
+            minutes = mins;
+        }
         let seconds = sec - (mins * 60);
-        return mins + ':' + (seconds > 9 ? seconds : '0' + seconds);
+
+        return (hours > 0 ? hours + ':' : '') +
+                    (minutes >= 10 ? minutes : '0' + minutes) + ':' +
+                    (seconds > 9 ? seconds : '0' + seconds);
     }
 }
 

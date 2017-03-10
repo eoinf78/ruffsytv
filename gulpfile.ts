@@ -34,6 +34,12 @@ gulp.task('sass', function() {
 		.pipe(gulp.dest('build'));
 });
 
+gulp.task('fontawesome', function(){
+    return gulp.src('src/app/scss/FontAwesome/font-awesome.scss')
+        .pipe(sass({ sourceComments: 'map' }))
+        .pipe(gulp.dest('build'));
+});
+
 /**
  * Compile TypeScript sources and create sourcemaps in build directory.
  */
@@ -69,6 +75,7 @@ gulp.task("libs", () => {
             '@angular/**/bundles/**',
             '@angular/**/src/**/*.js',
             '@types/lodash/**',
+            'ng2-youtube/**/*.js',
             'ng2-youtube-player/**/*.js',
             'typescript/**/*.js'
         ], {cwd: "node_modules/**"}) /* Glob required here. */
@@ -91,6 +98,6 @@ gulp.task('watch', function () {
 /**
  * Build the project.
  */
-gulp.task("build", ['compile', 'sass', 'resources', 'libs'], () => {
+gulp.task("build", ['compile', 'sass', 'fontawesome', 'resources', 'libs'], () => {
     console.log("Building the project ...");
 });
