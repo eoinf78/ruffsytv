@@ -1,1 +1,1 @@
-export * from './ruffvideo';
+export * from './ruffVideo.model';

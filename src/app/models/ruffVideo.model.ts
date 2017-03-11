@@ -5,7 +5,7 @@ export class RuffVideo {
     public projectname: string;
     public duration: number;
     public tags: string[];
-    public incidents: Incident[];
+    public incidents: Incident[] = [];
 
     constructor(  ) {}
 }

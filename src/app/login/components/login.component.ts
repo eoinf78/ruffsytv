@@ -7,14 +7,12 @@ import {Component, Input, Output, EventEmitter} from "@angular/core";
 })
 
 export class LoginComponent {
-    private router;
 
-    constructor() {
-        this.router = Router;
+    constructor(private router: Router) {
     }
 
     loginUser() {
         console.log(this.router.url);
-        // this.router.navigate(['/vidplayer']);
+        this.router.navigate(['/vidplayer']);
     }
 }

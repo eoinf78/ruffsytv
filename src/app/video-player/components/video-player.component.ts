@@ -19,7 +19,7 @@ export class VideoPlayerComponent implements OnInit {
     isVideoMuted: boolean = false;
     video_volume: number = 10;
     teststring: string = "String";
-    ruffVideo: RuffVideo;
+    ruffVideo: RuffVideo = this.newVideo();
     catg = IncidentCatg;
 
     current: number = 0;
@@ -31,16 +31,15 @@ export class VideoPlayerComponent implements OnInit {
     @Output() statusChanged: any = new EventEmitter<any>();
 
     constructor(private videoService: VideoService) {
-        this.ruffVideo = this.newVideo();
     }
 
     newVideo(): RuffVideo {
         let video = new RuffVideo();
-        //this.ruffVideo.title = "New Video";
-        this.ruffVideo.description = "";
-        this.ruffVideo.projectname = "New Project";
-        this.ruffVideo.incidents = [];
-        this.ruffVideo.tags = [];
+        //video.title = "New Video";
+        video.description = "";
+        video.projectname = "New Project";
+        video.incidents = [];
+        video.tags = [];
         this.videoService.addVideo(video);
         this.setTimeInterval();
         return video;
@@ -55,10 +54,12 @@ export class VideoPlayerComponent implements OnInit {
         console.log(event);
         this.gotoTime(event);
     }
+
     changeVolume(event) {
         this.player.setVolume(event);
         this.video_volume = event;
     }
+
     onPlayerError(event) {
         console.log("*** error ***");
         console.log(event);
@@ -69,6 +70,7 @@ export class VideoPlayerComponent implements OnInit {
         this.ytEvent = event.target.getCurrentTime();
         console.log('this.playerstate: ' + this.playerstate);
     }
+
     savePlayer(player) {
         this.player = player;
         player.hideVideoInfo();
@@ -81,15 +83,18 @@ export class VideoPlayerComponent implements OnInit {
         this.video_volume = this.player.getVolume();
         this.totalTime = this.player.getDuration();
         this.ruffVideo.title = this.player.getVideoData().title;
-       
+
         this.setTimeInterval();
     }
+
     playVideo() {
         this.player.playVideo();
     }
+
     pauseVideo() {
         this.player.pauseVideo();
     }
+
     toggleMute(val) {
         if (val === 'mute') {
             this.player.mute();
@@ -101,6 +106,7 @@ export class VideoPlayerComponent implements OnInit {
             this.video_volume = this.player.getVolume();
         }
     }
+
     setTime() {
         let time = Math.floor(this.player.getCurrentTime());
         let newIncident: Incident = new Incident();
@@ -116,18 +122,22 @@ export class VideoPlayerComponent implements OnInit {
 
         //this.timeArray.push(Math.floor(this.player.getCurrentTime()));
     }
+
     deleteIncident(item) {
         let idx = this.ruffVideo.incidents.indexOf(item);
         this.ruffVideo.incidents.splice(idx, 1);
 
         this.videoService.updateVideo(this.ruffVideo);
     }
+
     getVideoInfo() {
         console.log(this.ruffVideo);
     }
+
     gotoTime(goto) {
         this.player.seekTo(goto);
     }
+
     refreshVideoTimeline() {
         let dur = this.player.getDuration();
         let numOfSlots = 40;
@@ -142,11 +152,13 @@ export class VideoPlayerComponent implements OnInit {
             });
         });
     }
+
     setInsightPositions(val) {
         let total = this.totalTime;
         let percentage = (val / total) * 100;
         return Math.floor(percentage);
     }
+
     generateVideoTimeline() {
         let dur = this.player.getDuration();
         let numOfSlots = 40;

@@ -7,6 +7,8 @@ const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const tsProject = tsc.createProject("tsconfig.json");
 const tslint = require('gulp-tslint');
+const browserSync = require('browser-sync').create();
+const nodemon = require('gulp-nodemon');
 
 /**
  * Remove build directory.
@@ -28,13 +30,13 @@ gulp.task('tslint', () => {
 
 
 
-gulp.task('sass', function() {
-	return gulp.src('src/app/app.scss')
-		.pipe(sass({ sourceComments: 'map' }))
-		.pipe(gulp.dest('build'));
+gulp.task('sass', function () {
+    return gulp.src('src/app/app.scss')
+        .pipe(sass({ sourceComments: 'map' }))
+        .pipe(gulp.dest('build'));
 });
 
-gulp.task('fontawesome', function(){
+gulp.task('fontawesome', function () {
     return gulp.src('src/app/scss/FontAwesome/font-awesome.scss')
         .pipe(sass({ sourceComments: 'map' }))
         .pipe(gulp.dest('build'));
@@ -48,7 +50,7 @@ gulp.task("compile", ["tslint"], () => {
         .pipe(sourcemaps.init())
         .pipe(tsProject());
     return tsResult.js
-        .pipe(sourcemaps.write(".", {sourceRoot: '/src'}))
+        .pipe(sourcemaps.write(".", { sourceRoot: '/src' }))
         .pipe(gulp.dest("build"));
 });
 
@@ -65,20 +67,20 @@ gulp.task("resources", () => {
  */
 gulp.task("libs", () => {
     return gulp.src([
-            'core-js/client/shim.min.js',
-            'systemjs/dist/system-polyfills.js',
-            'systemjs/dist/system.src.js',
-            'reflect-metadata/Reflect.js',
-            'rxjs/**/*.js',
-            'zone.js/dist/**',
-            'lodash/**/*.js',
-            '@angular/**/bundles/**',
-            '@angular/**/src/**/*.js',
-            '@types/lodash/**',
-            'ng2-youtube/**/*.js',
-            'ng2-youtube-player/**/*.js',
-            'typescript/**/*.js'
-        ], {cwd: "node_modules/**"}) /* Glob required here. */
+        'core-js/client/shim.min.js',
+        'systemjs/dist/system-polyfills.js',
+        'systemjs/dist/system.src.js',
+        'reflect-metadata/Reflect.js',
+        'rxjs/**/*.js',
+        'zone.js/dist/**',
+        'lodash/**/*.js',
+        '@angular/**/bundles/**',
+        '@angular/**/src/**/*.js',
+        '@types/lodash/**',
+        'ng2-youtube/**/*.js',
+        'ng2-youtube-player/**/*.js',
+        'typescript/**/*.js'
+    ], { cwd: "node_modules/**" }) /* Glob required here. */
         .pipe(gulp.dest("build/lib"));
 });
 
@@ -86,7 +88,7 @@ gulp.task("libs", () => {
  * Watch for changes in TypeScript, HTML and CSS files.
  */
 gulp.task('watch', function () {
-	gulp.watch('src/**/*.scss', ['sass']);
+    gulp.watch('src/**/*.scss', ['sass']);
     gulp.watch(["src/**/*.ts"], ['compile']).on('change', function (e) {
         console.log('TypeScript file ' + e.path + ' has been changed. Compiling.');
     });
@@ -101,3 +103,27 @@ gulp.task('watch', function () {
 gulp.task("build", ['compile', 'sass', 'fontawesome', 'resources', 'libs'], () => {
     console.log("Building the project ...");
 });
+
+gulp.task('nodemon', function (cb) {
+    var callbackCalled = false;
+    return nodemon({ script: './server.js' }).on('start', function () {
+        if (!callbackCalled) {
+            callbackCalled = true;
+            cb();
+        }
+    });
+});
+
+gulp.task('serve', ['watch'
+    // , 'nodemon'
+], function () {
+
+    browserSync.init({
+        server: "./build"
+    });
+    //, {proxy: "http://localhost:9210" });
+
+    gulp.watch("build/**/*.html").on('change', browserSync.reload);
+});
+
+gulp.task('default', ['serve']);
