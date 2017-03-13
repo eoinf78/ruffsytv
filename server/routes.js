@@ -1,4 +1,6 @@
 var Marker = require('./models/markers');
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
 
 function getMarkers(res) {
     Marker.find(function (err, Markers) {
@@ -22,14 +24,15 @@ module.exports = function (app) {
 
     // create Marker and send back all Markers after creation
     app.post('/api/markers', function (req, res) {
+        req.body._id = ObjectId(req.body._id);
 
-        Marker.create(req.body, function (err, Marker) {
-            if (err)
-                res.send(err);
-
-            getMarkers(res);
+        Marker.findOneAndReplace(
+            { id: req.body.id },
+            req.body,
+            { upsert : true, returnNewDocument: true }, function (err, Marker) {
         });
 
+        getMarkers(res);
     });
 
     // delete a Marker

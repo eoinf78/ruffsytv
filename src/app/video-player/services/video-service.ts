@@ -14,27 +14,18 @@ export class VideoService {
 
     constructor(private http: Http) { }
 
-    getVideos(): Observable<RuffVideo> {
+    getVideos(): Observable<RuffVideo[]> {
         return this.http.get(this.url)
             .map(this.extractData)
             .catch(this.handleError);
     }
 
-    addVideo(video: RuffVideo): Observable<RuffVideo[]> {
+    addOrUpdateVideo(video: RuffVideo): Observable<RuffVideo[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
         console.log(video);
         return this.http.post(this.url, video, options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
-
-    updateVideo(video: RuffVideo): Observable<RuffVideo> {
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-
-        return this.http.put(this.url + "/" + video.id, video, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -46,9 +37,9 @@ export class VideoService {
     }
 
     private extractData(res: Response) {
-        console.log(res);
         let body = res.json();
-        return body.data || {};
+
+        return body.data || body || {};
     }
 
     private handleError(error: Response | any) {

@@ -43,6 +43,14 @@ export class VideoPlayerComponent implements OnInit {
     @Output() statusChanged: any = new EventEmitter<any>();
 
     constructor(private videoService: VideoService) {
+        videoService.getVideos().subscribe(videos => {
+            console.log(videos);
+            if (videos.length > 0) {
+                var video = videos[0];
+                this.id = video.id;
+                this.ruffVideo = video;
+            }
+        });
     }
 
     newVideo(): RuffVideo {
@@ -53,7 +61,7 @@ export class VideoPlayerComponent implements OnInit {
         video.projectname = "New Project";
         video.incidents = [];
         video.tags = [];
-        this.videoService.addVideo(video);
+        this.updateVideo(video);
         this.setTimeInterval();
         return video;
     }
@@ -131,18 +139,21 @@ export class VideoPlayerComponent implements OnInit {
         this.ruffVideo.incidents.push(newIncident);
         this.refreshVideoTimeline();
 
-        this.videoService.addVideo(this.ruffVideo).subscribe(result => {
+        this.updateVideo(this.ruffVideo);
+        //this.timeArray.push(Math.floor(this.player.getCurrentTime()));
+    }
+
+    updateVideo(video: RuffVideo) {
+        this.videoService.addOrUpdateVideo(video).subscribe(result => {
             this.markers = result;
         }, error => console.log('Could not load videos'));
-
-        //this.timeArray.push(Math.floor(this.player.getCurrentTime()));
     }
 
     deleteIncident(item) {
         let idx = this.ruffVideo.incidents.indexOf(item);
         this.ruffVideo.incidents.splice(idx, 1);
 
-        this.videoService.deleteVideo(this.ruffVideo);
+        this.updateVideo(this.ruffVideo);
     }
 
     getVideoInfo() {

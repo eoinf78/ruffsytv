@@ -1,5 +1,5 @@
 export class RuffVideo {
-    public id: String;
+    public id: string;
     public title: string;
     public description: string;
     public projectname: string;
