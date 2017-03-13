@@ -9,8 +9,20 @@ import _ from "lodash";
     templateUrl: './app/video-player/components/video-player.html'
 })
 export class VideoPlayerComponent implements OnInit {
-    id = 'L7ivJTup2mc'; // GJ4KPrrbOU4'; // live video
-    // id = 'KDov1ppPLCE';
+
+    private id = 'M7lc1UVf-VE';
+    //private id = 'pCZeVTMEsik'; // (Live);
+    //private id = '7XzdZ4KcI8Y'; //Rocket Jump
+    //private id = '031Dshcnso4'; // Flower power
+
+    //private id = 'ZfN_UIm0Ma0'; // Live Test
+    //private id = 'P_W7suE39lc' // Rowley Shoals
+
+    //private id = 'L7ivJTup2mc'; // GJ4KPrrbOU4'; // live video
+    //private id = 'KDov1ppPLCE';
+
+    private markers = [];
+
     private player;
     private ytEvent;
     private timeArray: number[] = [];
@@ -35,6 +47,7 @@ export class VideoPlayerComponent implements OnInit {
 
     newVideo(): RuffVideo {
         let video = new RuffVideo();
+        video.id = this.id;
         //video.title = "New Video";
         video.description = "";
         video.projectname = "New Project";
@@ -108,7 +121,7 @@ export class VideoPlayerComponent implements OnInit {
     }
 
     setTime() {
-        let time = Math.floor(this.player.getCurrentTime());
+        let time = 0 || Math.floor(this.player.getCurrentTime());
         let newIncident: Incident = new Incident();
         let sortedArray = this.ruffVideo.incidents;
         newIncident.time = time;
@@ -118,7 +131,9 @@ export class VideoPlayerComponent implements OnInit {
         this.ruffVideo.incidents.push(newIncident);
         this.refreshVideoTimeline();
 
-        this.videoService.updateVideo(this.ruffVideo);
+        this.videoService.addVideo(this.ruffVideo).subscribe(result => {
+            this.markers = result;
+        }, error => console.log('Could not load videos'));
 
         //this.timeArray.push(Math.floor(this.player.getCurrentTime()));
     }
@@ -127,7 +142,7 @@ export class VideoPlayerComponent implements OnInit {
         let idx = this.ruffVideo.incidents.indexOf(item);
         this.ruffVideo.incidents.splice(idx, 1);
 
-        this.videoService.updateVideo(this.ruffVideo);
+        this.videoService.deleteVideo(this.ruffVideo);
     }
 
     getVideoInfo() {
@@ -186,7 +201,7 @@ export class VideoPlayerComponent implements OnInit {
     setTimeInterval() {
         let vm = this;
         setInterval(function () {
-            if (!vm.player) { return ; }
+            if (!vm.player) { return; }
 
             vm.current = Math.round(vm.player.getCurrentTime());
         }, 100);

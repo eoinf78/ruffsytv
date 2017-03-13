@@ -6,7 +6,7 @@
     "clean": "gulp clean",
     "compile": "gulp compile",
     "build": "gulp build",
-    "start": "concurrent --kill-others \"gulp watch\" \"node server.js\"",
+    "start": "gulp serve",
     "postinstall": "typings install"
   },
   "dependencies": {

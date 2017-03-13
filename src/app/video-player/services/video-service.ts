@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class VideoService {
 
-    private url = "/api/videos";
+    private url = "/api/markers";
 
     private videos: Array<RuffVideo>;
 
@@ -20,11 +20,12 @@ export class VideoService {
             .catch(this.handleError);
     }
 
-    addVideo(video: RuffVideo): Observable<RuffVideo> {
+    addVideo(video: RuffVideo): Observable<RuffVideo[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
-        return this.http.post(this.url, { video }, options)
+        console.log(video);
+        return this.http.post(this.url, video, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -33,7 +34,7 @@ export class VideoService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
-        return this.http.put(this.url + "/" + video.id, { video }, options)
+        return this.http.put(this.url + "/" + video.id, video, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -45,6 +46,7 @@ export class VideoService {
     }
 
     private extractData(res: Response) {
+        console.log(res);
         let body = res.json();
         return body.data || {};
     }

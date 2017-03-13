@@ -114,14 +114,11 @@ gulp.task('nodemon', function (cb) {
     });
 });
 
-gulp.task('serve', ['watch'
-    // , 'nodemon'
-], function () {
+gulp.task('serve', ['watch', 'nodemon'], function () {
 
-    browserSync.init({
-        server: "./build"
+    browserSync.init(null, {
+        proxy: "http://localhost:9210"
     });
-    //, {proxy: "http://localhost:9210" });
 
     gulp.watch("build/**/*.html").on('change', browserSync.reload);
 });
