@@ -21,7 +21,7 @@ export class VideoPlayerComponent implements OnInit {
     //private id = 'L7ivJTup2mc'; // GJ4KPrrbOU4'; // live video
     //private id = 'KDov1ppPLCE';
 
-    private markers = [];
+    private videos = [];
 
     private player;
     private ytEvent;
@@ -44,7 +44,8 @@ export class VideoPlayerComponent implements OnInit {
 
     constructor(private videoService: VideoService) {
         videoService.getVideos().subscribe(videos => {
-            console.log(videos);
+            this.videos = videos;
+
             if (videos.length > 0) {
                 var video = videos[0];
                 this.id = video.id;
@@ -90,6 +91,7 @@ export class VideoPlayerComponent implements OnInit {
         this.playerstate = this.player.getPlayerState();
         this.ytEvent = event.target.getCurrentTime();
         console.log('this.playerstate: ' + this.playerstate);
+        this.savePlayer(this.player);
     }
 
     savePlayer(player) {
@@ -104,6 +106,8 @@ export class VideoPlayerComponent implements OnInit {
         this.video_volume = this.player.getVolume();
         this.totalTime = this.player.getDuration();
         this.ruffVideo.title = this.player.getVideoData().title;
+
+        this.updateVideo(this.ruffVideo);
 
         this.setTimeInterval();
     }
@@ -144,8 +148,12 @@ export class VideoPlayerComponent implements OnInit {
     }
 
     updateVideo(video: RuffVideo) {
+        if (!video.title || !video.id) {
+            return;
+        }
+
         this.videoService.addOrUpdateVideo(video).subscribe(result => {
-            this.markers = result;
+            this.videos = result;
         }, error => console.log('Could not load videos'));
     }
 
@@ -207,6 +215,18 @@ export class VideoPlayerComponent implements OnInit {
 
     getCatgClass(catg) {
         return parseInt(catg, 10) === IncidentCatg.Bug;
+    }
+
+    setVideo(videoId: string) {
+        videoId = videoId.replace("https://www.youtube.com/watch?v=", "");
+        this.id = videoId;
+        console.log(videoId);
+        this.player.loadVideoById(videoId);
+
+        this.ruffVideo = _.find(this.videos, { id: videoId }) as RuffVideo;
+        if (!this.ruffVideo) {
+            this.ruffVideo = this.newVideo();
+        }
     }
 
     setTimeInterval() {
