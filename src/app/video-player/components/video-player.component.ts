@@ -224,7 +224,7 @@ export class VideoPlayerComponent implements OnInit {
         this.player.loadVideoById(videoId);
 
         var video = _.find(this.videos, { id: videoId });
-        
+
         // copy into ruffVideo
         this.ruffVideo = { ...video} as RuffVideo;
         if (!this.ruffVideo) {
