@@ -29,7 +29,7 @@ export class VideoPlayerComponent implements OnInit {
 
     playerstate: number;
     isVideoMuted: boolean = false;
-    video_volume: number = 10;
+    video_volume: number;
     teststring: string = "String";
     ruffVideo: RuffVideo = this.newVideo();
     catg = IncidentCatg;
@@ -99,14 +99,13 @@ export class VideoPlayerComponent implements OnInit {
         player.hideVideoInfo();
         player.setOption("captions", "track", { "languageCode": "es" });
         // player.setOption('showinfo', 0);
-        this.player.playVideo();
+        // this.player.playVideo();
         this.player.hideVideoInfo();
         this.playerstate = this.player.getPlayerState();
         this.isVideoMuted = this.player.isMuted();
         this.video_volume = this.player.getVolume();
         this.totalTime = this.player.getDuration();
         this.ruffVideo.title = this.player.getVideoData().title;
-
         this.updateVideo(this.ruffVideo);
 
         this.setTimeInterval();

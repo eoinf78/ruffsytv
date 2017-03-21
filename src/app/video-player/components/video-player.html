@@ -35,7 +35,7 @@
                     </button>
                     <input type="range" class="video-details__volume" min="0" max="100" [(ngModel)]="video_volume" (ngModelChange)="changeVolume($event)"
                     />
-                    <span class="video-details__timerec">{{ current | incidentTime }}<span>&nbsp;/ {{ totalTime | incidentTime }}</span></span>
+                    <span class="video-details__timerec">{{ current | incidentTime }}<span>&nbsp;/&nbsp;{{ totalTime | incidentTime }}</span></span>
                 </div>
             </div>
             <!--Temporary timeline-->

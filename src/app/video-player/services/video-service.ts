@@ -23,8 +23,6 @@ export class VideoService {
     addOrUpdateVideo(video: RuffVideo): Observable<RuffVideo[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-
-        console.log(video);
         return this.http.post(this.url, video, options)
             .map(this.extractData)
             .catch(this.handleError);
