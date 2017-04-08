@@ -5,6 +5,10 @@ import {Component, OnInit} from "@angular/core";
     templateUrl: "./app/app.html",
 })
 export class AppComponent implements OnInit {
+
+    constructor() {
+    }
+
     ngOnInit() {
         console.log("Application component initialized ...");
     }

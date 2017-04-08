@@ -1,0 +1,121 @@
+<div class="container">
+     <!--*ngFor="let video of videos"-->
+    <form (ngSubmit)="newSession()" #sessionForm="ngForm" *ngIf="!sessionSelected">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="videoContainer" *ngIf="videoSessions.length > 0 && !newSession">
+                    <span class="videoLabel">Select Video</span>
+                    <select [(ngModel)]="currentSession" aria-placeholder="Select Video Session" id="selectSession" name="selectSession" required>
+                        <option *ngFor="let sess of videoSessions" [ngValue]="sess">{{ sess.title }}</option>
+                    </select>
+                    <span class="videoStatus" *ngIf="currentSession.status == 'Live'">Live</span>
+                </div>  
+                <div class="videoContainer" *ngIf="newSession">
+                    <span class="videoLabel">Title</span>
+                    <input type="text" class="videoInput" [(ngModel)]="currentSession.title" id="txtTitle" name="txtTitle"/>
+                </div>
+                <div class="videoContainer" *ngIf="!newSession">
+                    <button type="button" class="videoBtn secondary" (click)='createNewSession()'>Create new session</button>
+                </div>
+                <div class="videoContainer" *ngIf="newSession">
+                    <button type="button" class="videoBtn secondary" (click)='selectExistingSession()'>Select existing session</button>
+                </div>
+                <div class="videoContainer" *ngIf="videoSessions.length > 0">
+                    <span class="videoLabel">Select User</span>
+                    <select [(ngModel)]="selectedUser" aria-placeholder="Select User" id="selectUser" name="selectUser" required>
+                        <option *ngFor="let user of userList" [ngValue]="user">{{ user.Name }}</option>
+                    </select>
+                </div>
+                <div class="videoContainer">
+                    <span class="videoLabel" title="This is not the channel ID but the video ID">Enter Youtube ID</span>
+                    <input type="text" class="form-control" placeholder="" [(ngModel)]="newVideoId" id="urlId" name="urlId" required>
+                    <!--<span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button" (click)="setVideo(newVideoId); newVideoId='';">Start</button>
+                    </span>-->
+                </div>
+            </div>
+            <!--<div class="col-md-4">
+                <button type="button" *ngIf="video.stoppedAt == null">Stop Session</button>
+                <button type="button" (click)="selectSession(video.id)">Select</button>
+            </div>-->
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <button type="button" class="videoBtn" [disabled]="!sessionForm.form.valid" (click)="selectSession()">Start Session!</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <!--<div class="col-md-8">
+            <div class="text-center">
+                <h3>Video Sessions</h3>
+                <button class="btn btn-info" *ngFor="let video of videos" (click)="selectSession(video.id)" style="display: block;">{{ video.title }}</button>
+            </div>
+
+        </div>-->
+        <div class="col-md-8" *ngIf="currentSession != null && sessionSelected">
+            <div class="video-player">
+                <h2>{{ currentSession.title }}<span class="video-player__status" *ngIf="totalTime <= 0">Live</span></h2>
+                <youtube-player [(videoId)]="newVideoId" playerVars="{ 'controls': 0 }" width="100%" height="330" (ready)="savePlayer($event)" (change)="onStateChange($event)">
+                </youtube-player>
+            </div>
+            <div class="video-details">
+                <div class="btn-group video-details__controls" role="group">
+                    <button type="button" class="btnVideoControl" (click)="playVideo()" *ngIf="playerstate != 1 && totalTime > 0">
+                        <i class="fa fa-play" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnVideoControl" (click)="pauseVideo()" *ngIf="playerstate == 1 && totalTime > 0">
+                        <i class="fa fa-pause" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnVideoControl" (click)="toggleMute('mute')" *ngIf="!isVideoMuted">
+                        <i class="fa fa-volume-up" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnVideoControl" (click)="toggleMute('unmute')" *ngIf="isVideoMuted">
+                        <i class="fa fa-volume-off" aria-hidden="true"></i>
+                    </button>
+                    <input type="range" class="video-details__volume" min="0" max="100" [(ngModel)]="video_volume" (ngModelChange)="changeVolume($event)"
+                    />
+                    <span class="video-details__timerec">{{ current | incidentTime }}<span>&nbsp;/&nbsp;{{ totalTime | incidentTime }}</span></span>
+                </div>
+            </div>
+
+            <div style="display: table; margin-top: 12px; width: 100%;">
+                <div style="float: right;">
+                    <i class="fa fa-user"></i>&nbsp;&nbsp;{{ selectedUser.Name }}
+                </div>
+                <div style="float: left" *ngIf="currentSession.status == 'Live'">
+                    <button type="button" class="videoBtn" (click)="stopSession()">Stop Session!</button>
+                </div>
+            </div>
+            <!--Temporary timeline-->
+            <!--<div class="video-timeline" *ngIf="totalTime > 0">
+                <div class="video-timeline__container">
+                    <input class="video-timeline__timeline" type="range" min="0" [max]="totalTime" [(ngModel)]="current" (ngModelChange)="moveSlider($event)"
+                    />
+                    <span class="video-timeline__slot" *ngFor="let slot of ruffVideo.incidents" [ngStyle]="{left: setInsightPositions(slot.time)+'%'}"
+                        [ngClass]="{ bug: getCatgClass(slot.category) }">
+                        <a (click)="gotoTime(slot.time)" [title]="slot.time | incidentTime"></a>
+                    </span>
+                </div>
+            </div>-->
+        </div>
+        <div class="col-md-4" *ngIf="currentSession != null && sessionSelected">
+            <h4>Recorded Insights</h4>
+            <a (click)="setTime()" class="btnInsight">+ Add</a>
+            <div class="incident-list">
+                <div *ngFor="let insight of currentSession.insights" class="insight-item">
+                    <div class="insight-item__content">
+                        <span class="insight-item__label"><i class="fa fa-clock-o"></i>&nbsp;Time</span>
+                        <!--<span class="insight-item__value">{{ insight.content | incidentTime }}</span>-->
+                        <span class="insight-item__value">{{ insight.time | incidentTime }}</span>
+                    </div>
+                    <div class="insight-item__content">
+                        <span class="insight-item__label"><i class="fa fa-user"></i>&nbsp;User</span>
+                        <span class="insight-item__value">{{ insight.author }}</span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="videoBtn" (click)="refreshVideoSession()" style="margin-top: 12px;"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Refresh Session</button>
+        </div>
+    </div>
+</div>

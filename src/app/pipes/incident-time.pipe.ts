@@ -9,15 +9,15 @@ export class IncidentTimePipe implements PipeTransform {
         let hours = Math.floor(mins / 60);
         let minutes = 0;
         if (hours > 0) {
-            minutes = mins - (hours * 60);
+            minutes = Math.ceil(mins - (hours * 60));
         } else {
             minutes = mins;
         }
-        let seconds = sec - (mins * 60);
-
-        return (hours > 0 ? hours + ':' : '') +
+        let seconds = Math.ceil(sec) - (minutes * 60);
+        let returnval = '' + (hours > 0 ? hours + ':' : '') +
                     (minutes >= 10 ? minutes : '0' + minutes) + ':' +
                     (seconds > 9 ? seconds : '0' + seconds);
+        return returnval;
     }
 }
 

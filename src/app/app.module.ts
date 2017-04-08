@@ -6,7 +6,10 @@ import { YoutubePlayerModule } from 'ng2-youtube-player';
 import { KeysPipe, IncidentTimePipe, IncidentCatgPipe, OrderByPipe } from './pipes/incident-time.pipe';
 
 import { AppComponent } from "./app.component";
+
 import { VideoPlayerComponent } from "./video-player/components/video-player.component";
+import { TestPlayerComponent } from "./video-player/components/test-player.component";
+
 import { LoginComponent } from './login/components/login.component';
 
 import { AboutComponent } from "./about/components/about.component";
@@ -16,6 +19,7 @@ import { FormsModule } from "@angular/forms";
 import { VideoIconsModule } from "./modules/icons/icons.module";
 
 import { VideoService } from './video-player/services/video-service';
+import { TestService } from './video-player/services/test-service';
 
 @NgModule({
     imports: [
@@ -29,6 +33,7 @@ import { VideoService } from './video-player/services/video-service';
     declarations: [
         AppComponent,
         VideoPlayerComponent,
+        TestPlayerComponent,
         LoginComponent,
         AboutComponent,
         KeysPipe,
@@ -38,7 +43,8 @@ import { VideoService } from './video-player/services/video-service';
     ],
     providers: [
         appRoutingProviders,
-        VideoService
+        VideoService,
+        TestService,
     ],
     bootstrap: [AppComponent]
 })
